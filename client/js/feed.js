@@ -4,7 +4,7 @@ function onload(){
     //start a promise chain
     Promise.resolve()
     .then(function(){
-        return $.post('GetAllPosts');  
+        return $.post('feed.php?query=post');  
     })
     //when the server responds, we'll execute this code
     .then(function(posts){
@@ -21,6 +21,11 @@ function onload(){
               $('#feed-container').prepend(
                 '<div class="feed-block" data-postId="' + post._id + '">' +
                 '  <div class="feed-header">' +
+                '<a href="" class="feed-avatar">' +
+                '      <img src="'+ post.profilePicture +'" class="feed-avatar-image small"></img>' +
+                '    </a>' +
+                '    <div class="feed-info">' +
+                '      <a class="feed-user" href="">' + post.userName + '</a></div>'+
                 '    <a href="" class="feed-time">' +
                 '      <time>' + post.datePosted + '</time>' +
                 '    </a>' +
@@ -33,7 +38,7 @@ function onload(){
                 '    <ul class="comment-list">' +
                 '      <li>' +
                 '        <a class="feed-user" href="">' +
-                '          {username}' +
+                           post.userName +
                 '        </a>' + post.caption +'</li></ul>' +
                 '    <div class="add-comment">' +
                 '      <a class="fa fa-heart-o like-photo" onclick="likeClick(\'' + post._id + '\');"></a>' +
@@ -44,37 +49,22 @@ function onload(){
                 '  </div>' +
                 '</div>' 
               );
-              
               Promise.resolve()
               .then(function(){
-                return($.post('GetUserDetails',{id : post.userID}));
-              })
-              .then(function(userInfo){
-                  var user = userInfo[0];
-                  $("[data-postid='" + post._id + "']").find(".feed-user").text(user.username);
-                  $("[data-postid='" + post._id + "']").find(".feed-header").prepend(
-                      '<a href="" class="feed-avatar">' +
-                      '      <img src="'+ user.profilePicture +'" class="feed-avatar-image small"></img>' +
-                      '    </a>' +
-                      '    <div class="feed-info">' +
-                      '      <a class="feed-user" href="">' + user.username + '</a></div>'
-                  );
-              })
-              .then(function(){
-                return ($.post('GetAllComments',{id : post._id}));
+                return $.post('feed.php?query=comment');
               })
               .then(function(comments){
                 comments.forEach(function(entry){
                    console.log(entry); 
                    $("[data-postid='" + post._id + "']").find(".comment-list").append(
                     '      <li>' +
-                    '        <a class="feed-user" href="">' + entry.username + '</a>'+
+                    '        <a class="feed-user" href="">' + entry.userC + '</a>'+
                              entry.content + '</li></ul>'
                    );
                 });
               })
               .then(function(){
-                  return ($.post('GetAllHashtag',{id : post._id}));
+                  return $.post('feed.php?query=hashtag');
               })
               .then(function(hashtags){
                 $("[data-postid='" + post._id + "']").find(".comment-list li:first-child").append(
@@ -93,6 +83,7 @@ function onload(){
                 //always include a catch for exceptions
                 console.log(err);
               });
+              
             })
             .catch(function(err){
               //always include a catch for exceptions

@@ -1,4 +1,6 @@
 <?php
+    session_start();
+    
     require 'lib/password.php';
   
     $servername = getenv('IP');
@@ -9,7 +11,7 @@
         $db = new PDO("mysql:dbname=instagram;host=$servername", $username, "" );
         $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );//Error Handling
     
-        session_start();
+        
 
         $userEmail = $_POST['useremail'];
         $passwordAttempt = $_POST['password'];
@@ -38,7 +40,7 @@
             if($validPassword){
                 
                 //Provide the user with a login session.
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_id'] = $user['userName'];
                 $_SESSION['logged_in'] = time();
                 
                 //Redirect to our protected page, which we called home.php

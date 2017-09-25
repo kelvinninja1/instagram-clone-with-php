@@ -1,10 +1,17 @@
+<?php
+    session_start();
+    
+    if(!isset($_SESSION['user_id'])){
+    //User not logged in. Redirect them back to the login.php page.
+       // echo $_SESSION['user_id'];
+        header('Location: welcome');
+        exit;
+    }
+ 
+?>
 <!doctype html>
-<!--
-Group member:
-Hoang Huu Tat Dat - 7287975
-Sarah Martinelli Benedetti - 7636905
-/-->
-<html lang="en" ng-app>
+
+<html lang="en">
   <head>
     <title>Instagram assignment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +20,7 @@ Sarah Martinelli Benedetti - 7636905
     <link rel="stylesheet" href="./css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/main.css">
   </head>
-  <body onload="onload();">
+  <body onload="onload()">
     <?php require_once('header.php'); ?>
     <main class="main-feed">
       <div class="container">
@@ -49,8 +56,8 @@ Sarah Martinelli Benedetti - 7636905
          </div>
     </main>
     
-    <script src="/js/jquery.min.js"></script>
+    <script src="./js/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="/js/feed.js"></script>
+    <script src="./js/feed.js"></script>
   </body>
 </html>
