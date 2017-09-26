@@ -3,7 +3,7 @@
     
     if(!isset($_SESSION['user_id'])){
     //User not logged in. Redirect them back to the login.php page.
-       // echo $_SESSION['user_id'];
+        //
         header('Location: welcome');
         exit;
     }
@@ -41,12 +41,14 @@
                    <h4 class="modal-title">Add a Picture</h4>
                  </div>
                 <div class="modal-body">
-                     <form id="uploadForm" enctype="multipart/form-data" name="uploadForm" novalidate>
-                         <input type="file" name="userPhoto" id="userPhoto" />
+                     <form id="uploadForm" method="post" action="./upload" enctype="multipart/form-data" name="uploadForm" novalidate>
+                         <input type="file" name="userPhoto" id="userPhoto" accept="image/*" />
+                         <input type="submit" class="btn btn-default" name="uploadPhoto"/>
                      </form>
                  </div>
                  <div class="modal-footer">
-                   <button type="button" class="btn btn-default" data-dismiss="modal" onclick="uploadClick();">Send</button>
+                     
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal" onclick="uploadClick();">Send</button>-->
                  </div>
                </div>
              </div>

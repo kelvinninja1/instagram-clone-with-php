@@ -6,6 +6,7 @@
     $username = getenv('C9_USER');
     
     $queryType = $_GET["query"];
+    $toSearchFor = $_GET["postToSearch"];
 
     try {
         $db = new PDO("mysql:dbname=instagram;host=$servername", $username, "" );
@@ -20,9 +21,11 @@
         $sth = $db->prepare("SELECT * FROM Posts INNER JOIN Users ON Posts.userName = Users.userName");
     } else {
         if($queryType == 'hashtag'){
-            $sth = $db->prepare("SELECT DISTINCT tag FROM Hashtags INNER JOIN Posts ON Posts.postID = Hashtags.postID");  
+            $sth = $db->prepare("SELECT * FROM Hashtags INNER JOIN Posts ON Posts.postID = Hashtags.postID WHERE Posts.postID = :toSearch");
+            $sth->bindValue(':toSearch', $toSearchFor);
         } else {
-            $sth = $db->prepare("SELECT Comments.userName AS 'userC', content FROM Comments INNER JOIN Posts ON Comments.postID = Posts.postID");
+            $sth = $db->prepare("SELECT Comments.userName AS 'userC', content FROM Comments INNER JOIN Posts ON Comments.postID = Posts.postID WHERE Posts.postID = :toSearch");
+            $sth->bindValue(':toSearch', $toSearchFor);
         }
     }
     $sth->execute();

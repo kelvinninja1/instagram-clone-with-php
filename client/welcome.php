@@ -1,9 +1,4 @@
 <!doctype html>
-<!--
-Group member:
-Hoang Huu Tat Dat - 7287975
-Sarah Martinelli Benedetti - 7636905
-/-->
 <html lang="en">
   <head>
     <title>Instagram assignment</title>

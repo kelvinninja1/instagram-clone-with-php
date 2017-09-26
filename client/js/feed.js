@@ -18,8 +18,9 @@ function onload(){
               var feedBlockTemplate = "";
               var likesText = (post.likeCount > 1)? "likes": "like";
               
+              
               $('#feed-container').prepend(
-                '<div class="feed-block" data-postId="' + post._id + '">' +
+                '<div class="feed-block" data-postId="' + post.postID + '">' +
                 '  <div class="feed-header">' +
                 '<a href="" class="feed-avatar">' +
                 '      <img src="'+ post.profilePicture +'" class="feed-avatar-image small"></img>' +
@@ -34,14 +35,14 @@ function onload(){
                 '    <img src="'+ post.imageURL +'" class="img-responsive" alt="">' +
                 '  </a>' +
                 '  <div class="feed-body">' +
-                '    <p class="likes"><span id ="like' + post._id + '">'+ post.likeCount +'</span> '+ likesText +'</p>' +
+                '    <p class="likes"><span id ="like' + post.postId + '">'+ post.likeCount +'</span> '+ likesText +'</p>' +
                 '    <ul class="comment-list">' +
                 '      <li>' +
                 '        <a class="feed-user" href="">' +
                            post.userName +
                 '        </a>' + post.caption +'</li></ul>' +
                 '    <div class="add-comment">' +
-                '      <a class="fa fa-heart-o like-photo" onclick="likeClick(\'' + post._id + '\');"></a>' +
+                '      <a class="fa fa-heart-o like-photo" onclick="likeClick(\'' + post.postID + '\');"></a>' +
                 '      <form class="add-comment-form">' +
                 '        <input type="text" placeholder="Add a comment..." class="add-comment-input" name=""/>' +
                 '      </form>' +
@@ -49,14 +50,16 @@ function onload(){
                 '  </div>' +
                 '</div>' 
               );
-              Promise.resolve()
-              .then(function(){
-                return $.post('feed.php?query=comment');
+              var currentPost = post.postID;
+              Promise.resolve(currentPost)
+              .then(function(currentPost){
+                console.log(currentPost);
+                return $.post('feed.php?query=comment&postToSearch='+currentPost);
               })
               .then(function(comments){
                 comments.forEach(function(entry){
-                   console.log(entry); 
-                   $("[data-postid='" + post._id + "']").find(".comment-list").append(
+                   console.log(post.postID); 
+                   $("[data-postid='" + post.postID + "']").find(".comment-list").append(
                     '      <li>' +
                     '        <a class="feed-user" href="">' + entry.userC + '</a>'+
                              entry.content + '</li></ul>'
@@ -64,10 +67,10 @@ function onload(){
                 });
               })
               .then(function(){
-                  return $.post('feed.php?query=hashtag');
+                  return $.post('feed.php?query=hashtag&postToSearch='+post.postID);
               })
               .then(function(hashtags){
-                $("[data-postid='" + post._id + "']").find(".comment-list li:first-child").append(
+                $("[data-postid='" + post.postID + "']").find(".comment-list li:first-child").append(
                   '      <li class="comment-hashtags">' +
                   '        <a class="feed-user" href="">' + $(".feed-block:last-child .comment-list li:first-child .feed-user").text() + '</a>'+
                   '</li></ul>'
