@@ -44,7 +44,7 @@
             
             $action = "./welcome?page=forgetpassword";
             //$dataLocation = "";
-            $dataFormtype = "";
+            $dataFormtype = "forgetpassword";
 
             // this button is at the end of page
             $extraBtLinkTo = "./welcome"; 

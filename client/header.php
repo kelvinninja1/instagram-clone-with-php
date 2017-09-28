@@ -1,6 +1,6 @@
 <header class="">
   <div class="container special-padding">
-      <a href="http://www.instagram.com" class="logo pull-left">
+      <a href="../client/welcome" class="logo pull-left">
         <i class="fa fa-instagram logo-icon"></i>
         <img src="./img/logotext.svg" class="logo-text" >
       </a>
