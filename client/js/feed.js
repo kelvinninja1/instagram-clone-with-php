@@ -72,7 +72,7 @@ function onload(){
               .then(function(hashtags){
                 $("[data-postid='" + post.postID + "']").find(".comment-list li:first-child").append(
                   '      <li class="comment-hashtags">' +
-                  '        <a class="feed-user" href="">' + $(".feed-block:last-child .comment-list li:first-child .feed-user").text() + '</a>'+
+                  '        <a class="feed-user" href="">' + $(".feed-block:last-child .comment-list li:first-child .feed-user").eq(0).text() + '</a>'+
                   '</li></ul>'
                  );
                 hashtags.forEach(function(hashtag){
