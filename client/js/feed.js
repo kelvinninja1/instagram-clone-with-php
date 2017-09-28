@@ -35,7 +35,7 @@ function onload(){
                 '    <img src="'+ post.imageURL +'" class="img-responsive" alt="">' +
                 '  </a>' +
                 '  <div class="feed-body">' +
-                '    <p class="likes"><span id ="like' + post.postId + '">'+ post.likeCount +'</span> '+ likesText +'</p>' +
+                '    <p class="likes"><span id ="like' + post.postID + '">'+ post.likeCount +'</span> '+ likesText +'</p>' +
                 '    <ul class="comment-list">' +
                 '      <li>' +
                 '        <a class="feed-user" href="">' +
@@ -108,15 +108,20 @@ function likeClick(id){
         //jQuery provides a nice convenience method for easily sending a post with parameters in JSON
         //here we pass the ID to the incrLike route on the server side so it can do the incrementing for us
         //note the return. This MUST be here, or the subsequent then will not wait for this to complete
-        return $.post('incrLike', {id : id});
+        return $.post('like.php?postID='+id);
     })
     .then(function(like){
         //jQuery provides a nice convenience methot for easily setting the count to the value returned
-       if(like.count != -1){
-         document.getElementById('like' + like.id).innerHTML = like.count
-       } else {
-         alert("You liked this post already.");
-       }
+       if (typeof like === 'string' || like instanceof String)
+        $('body').prepend(like);
+        else{ 
+            console.log(like);
+            if(like[0].likeCount > 1) {
+               var currentText =  $("[data-postid='" + like[0].postID + "']").find(".likes").html();
+               $("[data-postid='" + like[0].postID + "']").find(".likes").html( currentText.replace(/like$/,"likes"));
+            }
+         document.getElementById('like' + like[0].postID).innerHTML = like[0].likeCount
+       } 
        
        
     })
@@ -124,27 +129,4 @@ function likeClick(id){
         //always include a catch for the promise chain
         console.log(err);
     });
-}
-
-function uploadClick(){
-    //go get the data from the form
-    var form = new FormData($("#uploadForm")[0]);
-    //we can post this way as well as $.post
-    $.ajax({
-            url: '/upload',
-            method: "POST",
-            dataType: 'json',
-            //the form object is the data
-            data: form,
-            //we want to send it untouched, so this needs to be false
-            processData: false,
-            contentType: false,
-            //add a message 
-            success: function(result){
-              setTimeout(function(){
-                window.location.reload(true);
-              },1000);
-            },
-            error: function(er){}
-    });            
 }
